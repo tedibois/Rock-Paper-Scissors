@@ -2,13 +2,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const rockButton = document.getElementById('rockC');
     const paperButton = document.getElementById('paperC');
     const scissorsButton = document.getElementById('scissorsC');
-
-    rockButton.addEventListener("click", () => handlePlayerChoice("rock"));
-    paperButton.addEventListener("click", () => handlePlayerChoice("paper"));
-    scissorsButton.addEventListener("click", () => handlePlayerChoice("scissors"));
+    
+    const resultDiv = document.querySelector(".result");
+    const playerScoreElement = document.getElementById("playerScore");
+    const computerScoreElement = document.getElementById("computerScore");
 
     let playerScore = 0;
     let computerScore = 0;
+
+    if (rockButton && paperButton && scissorsButton) {
+        rockButton.addEventListener("click", () => handlePlayerChoice("rock"));
+        paperButton.addEventListener("click", () => handlePlayerChoice("paper"));
+        scissorsButton.addEventListener("click", () => handlePlayerChoice("scissors"));
+    } else {
+        console.error("Buttons not found! Check your HTML IDs.");
+    }
 
     function handlePlayerChoice(playerChoice) {
         const computerChoice = getComputerChoice();
@@ -17,13 +25,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function getComputerChoice() {
         const choices = ["rock", "paper", "scissors"];
-        const randomIndex = Math.floor(Math.random() * 3);
-        return choices[randomIndex];
+        return choices[Math.floor(Math.random() * choices.length)];
     }
 
     function playround(playerChoice, computerChoice) {
-        const resultDiv = document.querySelector(".result");
-
         if (playerChoice === computerChoice) {
             resultDiv.textContent = "It's a tie!";
         } else if (
@@ -46,13 +51,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateScoreDisplay() {
-        const resultDiv = document.querySelector(".result");
-        resultDiv.textContent += `\nPlayer: ${playerScore} | Computer: ${computerScore}`;
+        playerScoreElement.textContent = playerScore;
+        computerScoreElement.textContent = computerScore;
     }
 
     function announceWinner() {
-        const resultDiv = document.querySelector(".result");
-
         if (playerScore > computerScore) {
             resultDiv.textContent = `You win the game! Final Score: Player ${playerScore} | Computer ${computerScore}`;
         } else {
@@ -61,5 +64,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         playerScore = 0;
         computerScore = 0;
+        updateScoreDisplay();
     }
 });
